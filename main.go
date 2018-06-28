@@ -44,6 +44,7 @@ func getConfig() (map[string]interface{}, error) {
 
 	config["frontends"] = map[string]interface{}{
 		"web": map[string]interface{}{
+			"entryPoints": []string{"http", "https"},
 			"routes": map[string]interface{}{
 				"all": map[string]interface{}{
 					"rule": "Path:/",
