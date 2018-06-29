@@ -47,7 +47,7 @@ func getConfig() (map[string]interface{}, error) {
 			"entryPoints": []string{"http", "https"},
 			"routes": map[string]interface{}{
 				"all": map[string]interface{}{
-					"rule": "Path:/",
+					"rule": "HostRegexp:{catchall:.*}",
 				},
 			},
 			"backend": "backend",
