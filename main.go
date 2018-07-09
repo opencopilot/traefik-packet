@@ -42,15 +42,38 @@ func getConfig() (map[string]interface{}, error) {
 		}
 	}
 
+	hostnames := make([]string, 0)
+	device, err := metadata.GetMetadata()
+	if err != nil {
+		return nil, err
+	}
+	hostnames = append(hostnames, strings.Split(device.ID, "-")[0]+".packethost.net")
+	for _, tag := range device.Tags {
+		pair := strings.Split(tag, "=")
+		if len(pair) == 0 || len(pair) == 1 {
+			continue
+		}
+		if len(pair) == 2 && pair[0] == "hostname" {
+			hostnames = append(hostnames, pair[1])
+			fmt.Println("hostname: " + pair[1])
+		}
+	}
+
 	config["frontends"] = map[string]interface{}{
 		"web": map[string]interface{}{
 			"entryPoints": []string{"http", "https"},
 			"routes": map[string]interface{}{
-				"all": map[string]interface{}{
+				"catchall": map[string]interface{}{
 					"rule": "HostRegexp:{catchall:.*}",
+				},
+				"hostnames": map[string]interface{}{
+					"rule": "Host:" + strings.Join(hostnames, ","),
 				},
 			},
 			"backend": "backend",
+			"headers": map[string]interface{}{
+				"SSLRedirect": true,
+			},
 		},
 	}
 
