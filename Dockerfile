@@ -1,6 +1,6 @@
 FROM golang:alpine
 
-WORKDIR /go/src/github.com/patrickdevivo/traefik-packet
+WORKDIR /go/src/github.com/opencopilot/traefik-packet
 COPY . .
 
 RUN apk update; apk add curl; apk add git;
